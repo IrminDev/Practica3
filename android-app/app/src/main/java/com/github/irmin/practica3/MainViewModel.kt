@@ -23,6 +23,7 @@ data class UiState(
     val adcValues: List<Int?> = listOf(null, null, null, null),
     val fanSpeed: Int = 0,
     val stepCount: Int = 10,
+    val errorMessage: String? = null,
 )
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {
@@ -48,10 +49,11 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             val result = c.connect(device)
             if (result.isSuccess) {
-                _state.update { it.copy(connectionStatus = ConnectionStatus.Connected) }
+                _state.update { it.copy(connectionStatus = ConnectionStatus.Connected, errorMessage = null) }
                 startReceiving(c)
             } else {
-                _state.update { it.copy(connectionStatus = ConnectionStatus.Error) }
+                val msg = result.exceptionOrNull()?.let { "${it.javaClass.simpleName}: ${it.message}" }
+                _state.update { it.copy(connectionStatus = ConnectionStatus.Error, errorMessage = msg) }
             }
         }
     }

@@ -252,6 +252,14 @@ fun ConnectionCard(
 
                 StatusBadge(state.connectionStatus)
             }
+
+            if (state.connectionStatus == ConnectionStatus.Error && state.errorMessage != null) {
+                Text(
+                    text = state.errorMessage,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
         }
     }
 }

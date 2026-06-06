@@ -1,0 +1,240 @@
+[p GLOBOPT AUTOSTATIC IEEE_DBL IEEE_FLT PIC14 PICREGULAR PICMID ]
+[d version 1.1 ]
+[d edition pro ]
+[d chip 16F873A ]
+[d frameptr 0 ]
+"5 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\common\atoi.c
+[v _atoi atoi `(i  1 e 2 0 ]
+"5 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\common\lwdiv.c
+[v ___lwdiv __lwdiv `(ui  1 e 2 0 ]
+"10 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\common\sprcadd.c
+[v ___fladd __fladd `(d  1 e 4 0 ]
+"15 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\common\Umul16.c
+[v ___wmul __wmul `(ui  1 e 2 0 ]
+"4 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\common\Umul8_16.c
+[v __Umul8_16 _Umul8_16 `(ui  1 e 2 0 ]
+"6 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\pic\__eeprom.c
+[v ___eecpymem __eecpymem `(v  1 e 1 0 ]
+"39
+[v ___memcpyee __memcpyee `(v  1 e 1 0 ]
+"95 C:\Users\irmin\MPLABXProjects\Practica3\PIC\Practica3Debugger.X\main.c
+[v _uart_putc uart_putc `(v  1 s 1 uart_putc ]
+"101
+[v _uart_puts uart_puts `(v  1 s 1 uart_puts ]
+"110
+[v _isr isr `II(v  1 e 1 0 ]
+"143
+[v _parse_response parse_response `(v  1 s 1 parse_response ]
+"174
+[v _update_leds update_leds `(v  1 s 1 update_leds ]
+"191
+[v _init init `(v  1 s 1 init ]
+"220
+[v _main main `(v  1 e 1 0 ]
+"57 C:/Program Files/Microchip/MPLABX/v6.30/packs/Microchip/PIC16Fxxx_DFP/1.7.162/xc8\pic\include\proc/pic16f873a.h
+[v _TMR0 TMR0 `VEuc  1 e 1 @1 ]
+"164
+[v _PORTA PORTA `VEuc  1 e 1 @5 ]
+"214
+[v _PORTB PORTB `VEuc  1 e 1 @6 ]
+"276
+[v _PORTC PORTC `VEuc  1 e 1 @7 ]
+[s S42 . 1 `uc 1 RBIF 1 0 :1:0 
+`uc 1 INTF 1 0 :1:1 
+`uc 1 TMR0IF 1 0 :1:2 
+`uc 1 RBIE 1 0 :1:3 
+`uc 1 INTE 1 0 :1:4 
+`uc 1 TMR0IE 1 0 :1:5 
+`uc 1 PEIE 1 0 :1:6 
+`uc 1 GIE 1 0 :1:7 
+]
+"381
+[s S51 . 1 `uc 1 . 1 0 :2:0 
+`uc 1 T0IF 1 0 :1:2 
+`uc 1 . 1 0 :2:3 
+`uc 1 T0IE 1 0 :1:5 
+]
+[u S56 . 1 `S42 1 . 1 0 `S51 1 . 1 0 ]
+[v _INTCONbits INTCONbits `VES56  1 e 1 @11 ]
+[s S22 . 1 `uc 1 TMR1IF 1 0 :1:0 
+`uc 1 TMR2IF 1 0 :1:1 
+`uc 1 CCP1IF 1 0 :1:2 
+`uc 1 SSPIF 1 0 :1:3 
+`uc 1 TXIF 1 0 :1:4 
+`uc 1 RCIF 1 0 :1:5 
+`uc 1 ADIF 1 0 :1:6 
+]
+"452
+[u S30 . 1 `S22 1 . 1 0 ]
+[v _PIR1bits PIR1bits `VES30  1 e 1 @12 ]
+"862
+[v _RCSTA RCSTA `VEuc  1 e 1 @24 ]
+[s S75 . 1 `uc 1 RX9D 1 0 :1:0 
+`uc 1 OERR 1 0 :1:1 
+`uc 1 FERR 1 0 :1:2 
+`uc 1 ADDEN 1 0 :1:3 
+`uc 1 CREN 1 0 :1:4 
+`uc 1 SREN 1 0 :1:5 
+`uc 1 RX9 1 0 :1:6 
+`uc 1 SPEN 1 0 :1:7 
+]
+"892
+[s S84 . 1 `uc 1 RCD8 1 0 :1:0 
+`uc 1 . 1 0 :5:1 
+`uc 1 RC9 1 0 :1:6 
+]
+[s S88 . 1 `uc 1 . 1 0 :6:0 
+`uc 1 nRC8 1 0 :1:6 
+]
+[s S91 . 1 `uc 1 . 1 0 :6:0 
+`uc 1 RC8_9 1 0 :1:6 
+]
+[u S94 . 1 `S75 1 . 1 0 `S84 1 . 1 0 `S88 1 . 1 0 `S91 1 . 1 0 ]
+[v _RCSTAbits RCSTAbits `VES94  1 e 1 @24 ]
+"957
+[v _TXREG TXREG `VEuc  1 e 1 @25 ]
+"964
+[v _RCREG RCREG `VEuc  1 e 1 @26 ]
+"1153
+[v _OPTION_REG OPTION_REG `VEuc  1 e 1 @129 ]
+"1223
+[v _TRISA TRISA `VEuc  1 e 1 @133 ]
+"1273
+[v _TRISB TRISB `VEuc  1 e 1 @134 ]
+"1335
+[v _TRISC TRISC `VEuc  1 e 1 @135 ]
+[s S136 . 1 `uc 1 TMR1IE 1 0 :1:0 
+`uc 1 TMR2IE 1 0 :1:1 
+`uc 1 CCP1IE 1 0 :1:2 
+`uc 1 SSPIE 1 0 :1:3 
+`uc 1 TXIE 1 0 :1:4 
+`uc 1 RCIE 1 0 :1:5 
+`uc 1 ADIE 1 0 :1:6 
+]
+"1413
+[u S144 . 1 `S136 1 . 1 0 ]
+[v _PIE1bits PIE1bits `VES144  1 e 1 @140 ]
+"1772
+[v _TXSTA TXSTA `VEuc  1 e 1 @152 ]
+"1853
+[v _SPBRG SPBRG `VEuc  1 e 1 @153 ]
+"2002
+[v _ADCON1 ADCON1 `VEuc  1 e 1 @159 ]
+"76 C:\Users\irmin\MPLABXProjects\Practica3\PIC\Practica3Debugger.X\main.c
+[v _tick tick `VEuc  1 s 1 tick ]
+"79
+[v _btn_cnt btn_cnt `[4]uc  1 s 4 btn_cnt ]
+"80
+[v _btn_armed btn_armed `[4]uc  1 s 4 btn_armed ]
+"82
+[v _fan_on fan_on `uc  1 s 1 fan_on ]
+"83
+[v _adc_ch adc_ch `uc  1 s 1 adc_ch ]
+"84
+[v _adc_mv adc_mv `[4]us  1 s 8 adc_mv ]
+"85
+[v _adc_timer adc_timer `uc  1 s 1 adc_timer ]
+"87
+[v _rx_buf rx_buf `VE[48]uc  1 s 48 rx_buf ]
+"88
+[v _rx_len rx_len `VEuc  1 s 1 rx_len ]
+"89
+[v _rx_ready rx_ready `VEuc  1 s 1 rx_ready ]
+"220
+[v _main main `(v  1 e 1 0 ]
+{
+"243
+[v main@bit bit `uc  1 a 1 71 ]
+"241
+[v main@i i `uc  1 a 1 74 ]
+"239
+[v main@raw raw `uc  1 a 1 72 ]
+"292
+} 0
+"174
+[v _update_leds update_leds `(v  1 s 1 update_leds ]
+{
+"182
+[v update_leds@i i `uc  1 a 1 16 ]
+"176
+[v update_leds@mv mv `us  1 a 2 12 ]
+"178
+[v update_leds@bars bars `uc  1 a 1 15 ]
+"181
+[v update_leds@pattern pattern `uc  1 a 1 14 ]
+"185
+} 0
+"5 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\common\lwdiv.c
+[v ___lwdiv __lwdiv `(ui  1 e 2 0 ]
+{
+"10
+[v ___lwdiv@quotient quotient `ui  1 a 2 8 ]
+"11
+[v ___lwdiv@counter counter `uc  1 a 1 10 ]
+"5
+[v ___lwdiv@divisor divisor `ui  1 p 2 4 ]
+[v ___lwdiv@dividend dividend `ui  1 p 2 6 ]
+"30
+} 0
+"101 C:\Users\irmin\MPLABXProjects\Practica3\PIC\Practica3Debugger.X\main.c
+[v _uart_puts uart_puts `(v  1 s 1 uart_puts ]
+{
+[v uart_puts@s s `*.24DCuc  1 p 1 5 ]
+"104
+} 0
+"95
+[v _uart_putc uart_putc `(v  1 s 1 uart_putc ]
+{
+[v uart_putc@c c `uc  1 p 1 wreg ]
+[v uart_putc@c c `uc  1 p 1 wreg ]
+[v uart_putc@c c `uc  1 p 1 4 ]
+"99
+} 1
+"143
+[v _parse_response parse_response `(v  1 s 1 parse_response ]
+{
+"159
+[v parse_response@ch ch `uc  1 a 1 68 ]
+"150
+[v parse_response@i i `uc  1 a 1 67 ]
+"145
+[v parse_response@local local `[48]uc  1 a 48 18 ]
+"158
+[v parse_response@p p `*.4uc  1 a 1 69 ]
+"146
+[v parse_response@len len `uc  1 a 1 66 ]
+"168
+} 0
+"5 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\common\atoi.c
+[v _atoi atoi `(i  1 e 2 0 ]
+{
+"7
+[v atoi@n n `i  1 a 2 15 ]
+"8
+[v atoi@neg neg `a  1 a 1 14 ]
+"5
+[v atoi@s s `*.4DCuc  1 p 1 10 ]
+"24
+} 0
+"15 C:\Program Files\Microchip\xc8\v3.10\pic\sources\c99\common\Umul16.c
+[v ___wmul __wmul `(ui  1 e 2 0 ]
+{
+"17
+[v ___wmul@product product `ui  1 a 2 8 ]
+"15
+[v ___wmul@multiplier multiplier `ui  1 p 2 4 ]
+[v ___wmul@multiplicand multiplicand `ui  1 p 2 6 ]
+"53
+} 0
+"191 C:\Users\irmin\MPLABXProjects\Practica3\PIC\Practica3Debugger.X\main.c
+[v _init init `(v  1 s 1 init ]
+{
+"214
+} 0
+"110
+[v _isr isr `II(v  1 e 1 0 ]
+{
+"126
+[v isr@c c `uc  1 a 1 3 ]
+"137
+} 0

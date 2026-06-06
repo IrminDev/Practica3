@@ -35,11 +35,30 @@ class BluetoothController(private val adapter: BluetoothAdapter) {
         runCatching {
             socket?.close()
             socket = null
-            val s = device.createRfcommSocketToServiceRecord(SPP_UUID)
-            adapter.cancelDiscovery()
-            s.connect()
-            socket = s
+            try { adapter.cancelDiscovery() } catch (_: SecurityException) {}
+            socket = openSocket(device)
         }
+    }
+
+    // BT04-A / HC-06 modules often don't advertise SDP, so createRfcommSocketToServiceRecord
+    // fails. Try three strategies in order: secure SDP → insecure SDP → reflection channel 1.
+    @SuppressLint("MissingPermission")
+    private fun openSocket(device: BluetoothDevice): BluetoothSocket {
+        try {
+            val s = device.createRfcommSocketToServiceRecord(SPP_UUID)
+            s.connect()
+            return s
+        } catch (_: Exception) {}
+        try {
+            val s = device.createInsecureRfcommSocketToServiceRecord(SPP_UUID)
+            s.connect()
+            return s
+        } catch (_: Exception) {}
+        // Direct RFCOMM channel 1 — works for HC-05, HC-06, BT04-A and similar modules
+        val method = device.javaClass.getMethod("createRfcommSocket", Int::class.javaPrimitiveType)
+        val s = method.invoke(device, 1) as BluetoothSocket
+        s.connect()
+        return s
     }
 
     /** Blocks until the socket is closed or an IO error occurs. */
@@ -56,7 +75,10 @@ class BluetoothController(private val adapter: BluetoothAdapter) {
 
     suspend fun send(command: String) = withContext(Dispatchers.IO) {
         runCatching {
-            socket?.outputStream?.write("$command\n".toByteArray(Charsets.US_ASCII))
+            socket?.outputStream?.let { out ->
+                out.write("$command\n".toByteArray(Charsets.US_ASCII))
+                out.flush()
+            }
         }
     }
 

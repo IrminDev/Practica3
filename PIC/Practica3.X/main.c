@@ -153,10 +153,14 @@ void __interrupt() isr(void)
 
         if (c == '\n' || c == '\r')
         {
-            if (cmd_len > 0u)
+            if (cmd_len > 0u && !cmd_ready)
+            {
                 cmd_ready = 1u;     // signal complete command to main loop
+                // cmd_len intentionally left set; process_cmd() reads and resets it
+            }
+            // if cmd_ready already set (previous cmd not yet consumed), discard this newline
         }
-        else if (cmd_len < CMD_SIZE - 1u)
+        else if (!cmd_ready && cmd_len < CMD_SIZE - 1u)
         {
             cmd_buf[cmd_len++] = c;
         }
