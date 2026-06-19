@@ -1,9 +1,4 @@
 /*
- * File:   main.c
- * Author: irmin
- *
- * PIC16F873A @ 4 MHz crystal (XT mode)
- *
  * Pinout (DIP-28):
  *  Pin  2  RA0/AN0  - ADC ch0   (0-5 V analogue input)
  *  Pin  3  RA1/AN1  - ADC ch1   (0-5 V analogue input)
@@ -30,17 +25,17 @@
 // Configuration bits
 // ---------------------------------------------------------------------------
 #pragma config FOSC  = XT       // 4 MHz XT crystal
-#pragma config WDTE  = OFF      // watchdog disabled
-#pragma config PWRTE = ON       // power-up timer enabled (72 ms stabilisation)
-#pragma config CP    = OFF      // no code protection
-#pragma config BOREN = ON       // brown-out reset enabled
-#pragma config LVP   = OFF      // LVP off  ->  RB3 usable as GPIO
+#pragma config WDTE  = OFF     
+#pragma config PWRTE = ON      
+#pragma config CP    = OFF     
+#pragma config BOREN = ON     
+#pragma config LVP   = OFF     
 #pragma config CPD   = OFF
 #pragma config WRT   = OFF
 
 #include <xc.h>
 #include <stdint.h>
-#include <stdlib.h>             // atoi
+#include <stdlib.h>           
 
 #define _XTAL_FREQ  4000000UL
 
@@ -48,19 +43,15 @@
 // Constants
 // ---------------------------------------------------------------------------
 
-// USART  9600 baud @ 4 MHz, BRGH=1:  SPBRG = Fosc/(16*baud) - 1 = 25
+// USART  9600 baud @ 4 MHz
 #define UART_SPBRG      25u
 
-// PWM ~1 kHz:  Timer2 prescaler = 4, PR2 = 249
-// Period = (PR2+1) * 4 * Tosc * prescaler = 250 * 4 * 0.25 us * 4 = 1 ms
+// PWM ~1 kHz
 #define PWM_PR2         249u
 
-// Timer0 ~5 ms stepper tick:  Fosc/4 = 1 MHz, prescaler 1:32
-// reload = 256 - floor(5000/32) = 256 - 156 = 100  ->  actual ~4.992 ms
+// Timer0 ~5 ms
 #define T0_RELOAD       100u
 
-// 4-phase full-step sequence on RB[3:0], defines CW rotation
-// IN1=RB0 IN2=RB1 IN3=RB2 IN4=RB3
 // Step:  AB  BC  CD  DA
 static const uint8_t STEP_SEQ[4] = {0x03u, 0x06u, 0x0Cu, 0x09u};
 
@@ -117,14 +108,16 @@ static uint16_t adc_read(uint8_t ch)
 }
 
 // ---------------------------------------------------------------------------
-// PWM  (CCP1 / Timer2)
+// PWM 
 // ---------------------------------------------------------------------------
 
 static void fan_set_pct(uint8_t pct)
 {
-    // 10-bit duty word = pct * (PR2+1) / 100
-    uint16_t duty = ((uint16_t)pct * (PWM_PR2 + 1u)) / 100u;
-    CCPR1L  = (uint8_t)(duty >> 2u);
+    // 10-bit duty word (0..1000 == 0..100%): pct * (PR2+1) * 4 / 100
+    // The *4 accounts for the two Tosc/4 sub-bits of CCP PWM resolution.
+    // uint32 cast avoids the 16-bit overflow of 100 * 1000.
+    uint16_t duty = (uint16_t)(((uint32_t)pct * (PWM_PR2 + 1u) * 4u) / 100u);
+    CCPR1L  = (uint8_t)(duty >> 2u); 
     CCP1CON = (CCP1CON & 0xCFu) | (uint8_t)((duty & 0x03u) << 4u);
 }
 
@@ -155,10 +148,8 @@ void __interrupt() isr(void)
         {
             if (cmd_len > 0u && !cmd_ready)
             {
-                cmd_ready = 1u;     // signal complete command to main loop
-                // cmd_len intentionally left set; process_cmd() reads and resets it
+                cmd_ready = 1u;
             }
-            // if cmd_ready already set (previous cmd not yet consumed), discard this newline
         }
         else if (!cmd_ready && cmd_len < CMD_SIZE - 1u)
         {
@@ -231,9 +222,9 @@ static void process_cmd(void)
 
 static void init_ports(void)
 {
-    TRISA = 0x3Fu;  // RA[5:0] inputs  (ADC channels AN0-AN4)
-    TRISB = 0x00u;  // RB all outputs  (stepper on RB[3:0], RB[7:4] spare)
-    TRISC = 0x80u;  // RC7 input (RX); RC6 output (TX); RC2 output (CCP1/PWM)
+    TRISA = 0x3Fu;
+    TRISB = 0x00u;
+    TRISC = 0x80u;
     PORTA = 0x00u;
     PORTB = 0x00u;
     PORTC = 0x00u;
@@ -241,35 +232,30 @@ static void init_ports(void)
 
 static void init_adc(void)
 {
-    // ADFM=1 right-justified 10-bit result in ADRESH:ADRESL
-    // PCFG=0000 -> AN0-AN4 analogue inputs, Vref = VDD
     ADCON1 = 0x80u;
-    // ADC clock Fosc/8 (TAD=2 us @ 4 MHz), channel 0, ADC on
-    // Overwritten per channel inside adc_read()
     ADCON0 = 0x41u;
 }
 
 static void init_pwm(void)
 {
-    PR2     = PWM_PR2;  // set PWM period
-    CCPR1L  = 0x00u;   // start at 0 % duty (fan off)
-    CCP1CON = 0x0Cu;   // CCP1 in PWM mode
-    T2CON   = 0x05u;   // Timer2 on, prescaler 1:4
+    PR2     = PWM_PR2;
+    CCPR1L  = 0x00u; 
+    CCP1CON = 0x0Cu;  
+    T2CON   = 0x05u;
 }
 
 static void init_uart(void)
 {
     SPBRG = UART_SPBRG;
-    TXSTA = 0x24u;      // TXEN=1, BRGH=1, asynchronous mode
-    RCSTA = 0x90u;      // SPEN=1, CREN=1 (continuous receive enabled)
+    TXSTA = 0x24u;  
+    RCSTA = 0x90u; 
 }
 
 static void init_timer0(void)
 {
-    // T0CS=0 internal (Fosc/4), PSA=0 prescaler to TMR0, PS=100 -> 1:32
     OPTION_REG = (OPTION_REG & 0xC0u) | 0x04u;
     TMR0 = T0_RELOAD;
-    INTCONbits.T0IE = 1u;   // enable TMR0 overflow interrupt
+    INTCONbits.T0IE = 1u;
 }
 
 // ---------------------------------------------------------------------------
@@ -284,15 +270,14 @@ void main(void)
     init_uart();
     init_timer0();
 
-    PIE1bits.RCIE   = 1u;   // USART receive interrupt
-    INTCONbits.PEIE = 1u;   // peripheral interrupt enable
-    INTCONbits.GIE  = 1u;   // global interrupt enable
+    PIE1bits.RCIE   = 1u;
+    INTCONbits.PEIE = 1u;
+    INTCONbits.GIE  = 1u;
 
     uart_puts("OK\n");
 
     for (;;)
     {
-        // Process complete command received over Bluetooth
         if (cmd_ready)
         {
             cmd_ready = 0u;
@@ -316,7 +301,6 @@ void main(void)
                 PORTB = (PORTB & 0xF0u) | STEP_SEQ[step_idx];
                 step_count++;
             }
-            // Coils remain energised at the final step for holding torque.
         }
     }
 }
